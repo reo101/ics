@@ -1,0 +1,49 @@
+------------
+-- Tables --
+------------
+
+-- -- images
+-- CREATE TABLE takovata.images (
+--     id         INTEGER   NOT NULL,
+--     url        VARCHAR   NOT NULL,
+--     added_on   TIMESTAMP NOT NULL,
+--     width      INTEGER   NOT NULL,
+--     height     INTEGER   NOT NULL
+-- );
+--
+-- -- tags
+-- CREATE TABLE takovata.tags (
+--     id   INTEGER NOT NULL,
+--     name VARCHAR NOT NULL
+-- );
+--
+-- -- images_tags
+-- CREATE TABLE takovata.images_tags (
+--     image_id    INTEGER NOT NULL,
+--     tag_id      INTEGER NOT NULL,
+--     certainty   FLOAT   NOT NULL
+-- );
+
+
+---------------
+-- Relations --
+---------------
+
+-- -- images
+-- ALTER TABLE ONLY takovata.images
+--     ADD CONSTRAINT pk_images PRIMARY KEY (id);
+--
+-- -- tags
+-- ALTER TABLE ONLY takovata.tags
+--     ADD CONSTRAINT pk_tags PRIMARY KEY (id);
+--
+-- -- images_tags
+-- ALTER TABLE ONLY takovata.images_tags
+--     ADD CONSTRAINT fk_image_id
+--             FOREIGN KEY (image_id)
+--             REFERENCES images(id);
+--
+-- ALTER TABLE ONLY takovata.images_tags
+--     ADD CONSTRAINT fk_tag_id
+--             FOREIGN KEY (tag_id)
+--             REFERENCES tags(id);
