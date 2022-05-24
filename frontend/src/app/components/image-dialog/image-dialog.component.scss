@@ -1,0 +1,46 @@
+#popup {
+
+    #image {
+        max-width: 60%;
+        max-height: 25%;
+        object-fit: contain;
+    }
+
+    #tags {
+        padding: 20px;
+
+        #tags-table {
+            max-height: 40%;
+            overflow-y: scroll;
+            display: block;
+            border-collapse: collapse;
+
+            thead {
+                idth: calc(100% - 1em);
+
+                #tags-header {
+                    width: 400px;
+                    background: DodgerBlue;
+                    border-bottom: 1px solid red;
+
+                    th {
+                        padding: 3px 5px;
+                        border: solid blue;
+                    }
+                }
+            }
+
+            thead, .tag {
+                isplay: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+
+            tbody {
+                td {
+                    border: solid blue;
+                }
+            }
+        }
+    }
+}

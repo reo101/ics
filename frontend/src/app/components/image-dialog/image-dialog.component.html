@@ -1,0 +1,37 @@
+<h3 mat-dialog-title>Image Details</h3>
+<div mat-dialog-content id="popup">
+  <img id="image" [src]="this.image?.url">
+  <div id="date">
+    Added on
+    <b>{{this.dateString}}</b>
+  </div>
+  <div id="tags">
+    <table id="tags-table">
+      <thead>
+        <tr id="tags-header">
+          <th>
+            Tag
+          </th>
+          <th>
+            Confidence (in %)
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="tag" *ngFor="let tag of this.image?.tags | keyvalue | sortByValue">
+          <td>
+            <a [routerLink] = "['/gallery', {tags: tag.key}]" mat-dialog-close class="nav-link">
+              {{tag.key}}
+            </a>
+          </td>
+          <td>
+            {{tag.value.toFixed(2)}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</div>

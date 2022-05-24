@@ -1,0 +1,7 @@
+<app-navbar></app-navbar>
+
+<div class="images">
+  <div class="image-div" *ngFor="let image of this.images">
+    <img class="image" [src]="image.url" (click)="openDialog(image)">
+  </div>
+</div>
