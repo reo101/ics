@@ -1,0 +1,69 @@
+## Define variables
+variables:
+  MAVEN_VERSION: "0.0.1-SNAPSHOT"
+
+## Define cache
+cache:
+  paths:
+    - backend/.m2/repository/
+    - backend/target/
+
+## Define stages
+stages:
+  - build-stage
+  - test-stage
+  - package-stage
+
+# Build job - builds the project without running tests
+build-job:
+  stage: build-stage
+  image: maven:3.8-openjdk-17
+  variables:
+    MAVEN_CLI_OPTS: "-Dmaven.test.skip=true"
+    MAVEN_CLI_CMD: "install"
+  script: |
+    cd backend
+    cp src/main/resources/application.properties{.example,}
+    mvn ${MAVEN_CLI_OPTS} ${MAVEN_CLI_CMD}
+  artifacts:
+    name: jar
+    when: always
+    paths:
+      - "backend/target/backend-${MAVEN_VERSION}.jar"
+
+# BUG: VVV this will fail because of the absence of a running database at runtime
+# Test job - tests the project by running the tests
+test-job:
+  stage: test-stage
+  image: maven:3.8-openjdk-17
+  variables:
+    MAVEN_CLI_OPTS: ""
+    MAVEN_CLI_CMD: "test"
+  script: |
+    cd backend
+    cp src/main/resources/application.properties{.example,}
+    mvn ${MAVEN_CLI_OPTS} ${MAVEN_CLI_CMD}
+  artifacts:
+    name: results
+    when: always
+    paths:
+      - "backend/**/target"
+    reports:
+      junit:
+        - "backend/**/target/*-reports/TEST-*.xml"
+
+# Package job - creates a distributable jar
+package-job:
+  stage: package-stage
+  tags:
+    - docker
+  script: |
+    cd backend
+    docker build \
+      --build-arg MAVEN_VERSION=${MAVEN_VERSION} \
+      -t 192.168.12.25:5000/reo101/ics:latest \
+      .
+    docker push \
+      192.168.12.25:5000/reo101/ics:latest
+  dependencies:
+    - build-job
