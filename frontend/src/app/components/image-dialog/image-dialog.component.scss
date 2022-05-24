@@ -39,6 +39,17 @@
             tbody {
                 td {
                     border: solid blue;
+                    text-align: center;
+
+                    a, a:visited {
+                        text-decoration: none;
+                        color: black;
+                        font-weight: bold;
+                    }
+
+                    a:hover {
+                        text-decoration: underline;
+                    }
                 }
             }
         }
