@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-// import { MatDialog } from '@angular/material/dialog';
-import { Image } from 'src/app/models/image';
-import { ImageService } from 'src/app/services/image.service';
-import { ImageDialogComponent } from '../image-dialog/image-dialog.component';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+// import { MatDialog } from "@angular/material/dialog";
+import { Image } from "src/app/models/image";
+import { ImageService } from "src/app/services/image.service";
+import { ImageDialogComponent } from "../image-dialog/image-dialog.component";
 
 @Component({
-  selector: 'app-analyzation',
-  templateUrl: './analyzation.component.html',
-  styleUrls: ['./analyzation.component.scss']
+  selector: "app-analyzation",
+  templateUrl: "./analyzation.component.html",
+  styleUrls: ["./analyzation.component.scss"]
 })
 export class AnalyzationComponent implements OnInit {
 
   form: FormGroup = new FormGroup({
-    url: new FormControl(''),
+    url: new FormControl(""),
   });
   private image?: Image;
   private urlPattern: RegExp =
@@ -29,7 +29,7 @@ export class AnalyzationComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.form = this.formBuilder.group({
-      url: ['', [Validators.required, Validators.pattern(this.urlPattern)]]
+      url: ["", [Validators.required, Validators.pattern(this.urlPattern)]]
     });
   }
 

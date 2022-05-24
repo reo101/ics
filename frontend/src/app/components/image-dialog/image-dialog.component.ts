@@ -1,13 +1,13 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
-import { formatDate } from '@angular/common';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Image } from 'src/app/models/image';
-import { SortByValuePipe } from 'src/app/pipes/sortByValue.pipe';
+import { Component, Inject, LOCALE_ID, OnInit } from "@angular/core";
+import { formatDate } from "@angular/common";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Image } from "src/app/models/image";
+import { SortByValuePipe } from "src/app/pipes/sortByValue.pipe";
 
 @Component({
-  selector: 'app-image-popup',
-  templateUrl: './image-dialog.component.html',
-  styleUrls: ['./image-dialog.component.scss'],
+  selector: "app-image-popup",
+  templateUrl: "./image-dialog.component.html",
+  styleUrls: ["./image-dialog.component.scss"],
   providers: [SortByValuePipe],
 })
 export class ImageDialogComponent implements OnInit {

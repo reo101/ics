@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { Image } from 'src/app/models/image';
-import { ImageService } from 'src/app/services/image.service';
-import { ImageDialogComponent } from 'src/app/components/image-dialog/image-dialog.component';
+import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
+import { Image } from "src/app/models/image";
+import { ImageService } from "src/app/services/image.service";
+import { ImageDialogComponent } from "src/app/components/image-dialog/image-dialog.component";
 
 @Component({
-  selector: 'app-gallery',
-  templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.scss']
+  selector: "app-gallery",
+  templateUrl: "./gallery.component.html",
+  styleUrls: ["./gallery.component.scss"]
 })
 export class GalleryComponent implements OnInit {
 
