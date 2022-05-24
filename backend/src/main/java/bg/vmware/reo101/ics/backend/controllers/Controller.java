@@ -140,6 +140,9 @@ public class Controller {
 
         tagCouples.stream()
                 .sequential()
+                .filter((TagCouple tagCouple) -> {
+                    return tagCouple.getConfidence() >= 20;
+                })
                 .forEach((TagCouple tagCouple) -> {
                     Tag tag = this.tagService.createIfMissing(
                             tagCouple.getTag().getEn());
