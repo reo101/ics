@@ -33,14 +33,13 @@ export class AnalyzationComponent implements OnInit {
     });
   }
 
-  isInvalid() {
-    return this.form.controls["url"].touched &&
-      this.form.controls["url"].invalid;
+  isInvalid(pristine: boolean) {
+    return (pristine && this.form.controls["url"].pristine) ||
+      (this.form.controls["url"].touched && this.form.controls["url"].invalid);
   }
 
   hasError(error: string) {
-    return this.form.controls["url"].errors &&
-      this.form.controls["url"].errors[error];
+    return this.form.controls["url"].errors && this.form.controls["url"].errors[error];
   }
 
   openDialog() {

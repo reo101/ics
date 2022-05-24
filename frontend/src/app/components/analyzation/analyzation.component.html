@@ -4,7 +4,7 @@
   <form id="form" [formGroup]="form" (submit)="addImage({ url: this.form.get('url')?.value ?? '' })">
     <label id="title" for="url">Enter an image URL</label>
     <input id="url" name="url" [formControlName]="'url'" type="text" placeholder="URL">
-    <div *ngIf="isInvalid()"
+    <div *ngIf="isInvalid(false)"
          id="errors" class="alert alert-danger">
       <label *ngIf="hasError('required')"
              class="error">
@@ -15,6 +15,6 @@
         URL must be a valid image url.
       </label>
     </div>
-    <button mat-raised-button [disabled]="isInvalid()" id="analyse" type="submit">Analyse</button>
+    <button mat-raised-button [disabled]="isInvalid(true)" id="analyse" type="submit">Analyse</button>
   </form>
 </div>
