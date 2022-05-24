@@ -10,11 +10,15 @@ public interface ImageService {
 
     Image getById(Long id);
 
+    Image getByUrl(String url);
+
     Image create(Image image);
 
     List<Image> getAll();
 
     List<Image> getByTags(Set<Tag> tags);
+
+    void flush();
 
     void delete(Long id);
 }

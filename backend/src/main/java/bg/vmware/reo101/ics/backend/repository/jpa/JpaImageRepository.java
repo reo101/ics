@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface JpaImageRepository extends JpaRepository<Image, Long> {
 
     Optional<Image> getImageById(Long id);
+
+    Optional<Image> getImageByUrl(String url);
 }

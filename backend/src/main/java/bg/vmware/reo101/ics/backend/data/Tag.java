@@ -1,12 +1,12 @@
 package bg.vmware.reo101.ics.backend.data;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +30,7 @@ public class Tag implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @Column(name = "name", unique = true)
@@ -37,6 +38,7 @@ public class Tag implements Serializable {
 
     //@formatter:off
     @OneToMany(mappedBy = "id",
+               fetch = FetchType.LAZY,
                cascade = CascadeType.ALL)
     //@formatter:on
     @JsonIgnore
@@ -45,19 +47,4 @@ public class Tag implements Serializable {
     public Tag(String name) {
         this.name = name;
     }
-
-    // @Override
-    // public boolean equals(Object obj) {
-    //     if (this == obj) {
-    //         return true;
-    //     }
-    //
-    //     if (obj == null || this.getClass() != obj.getClass()) {
-    //         return false;
-    //     }
-    //
-    //     Tag tag = (Tag) obj;
-    //
-    //     return Objects.equals(this.name, tag.name);
-    // }
 }

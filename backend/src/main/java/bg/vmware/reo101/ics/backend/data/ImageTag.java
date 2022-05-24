@@ -12,7 +12,6 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,13 +42,13 @@ public class ImageTag implements Serializable {
     @JsonIgnore
     private Long tagId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("image_id")
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     @JsonIgnore
     private Image image;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId("tag_id")
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
     private Tag tag;

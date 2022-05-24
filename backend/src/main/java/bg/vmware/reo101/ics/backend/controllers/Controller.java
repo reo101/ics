@@ -6,13 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -25,13 +19,13 @@ import javax.swing.ImageIcon;
 
 import com.google.gson.Gson;
 
-import org.hibernate.type.LocalDateType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +44,7 @@ import bg.vmware.reo101.ics.backend.service.TagService;
 import lombok.Getter;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "If-Match")
 @RequestMapping("/images")
 public class Controller {
 
@@ -106,23 +101,28 @@ public class Controller {
 
     @PostMapping(value = "/add")
     @Transactional(propagation = Propagation.NESTED)
-    public ResponseEntity<Void> addImage(@RequestBody Image image,
+    public ResponseEntity<Image> addImage(@RequestBody Image image,
             @RequestParam(name = "noCache", defaultValue = "false") Boolean skipCache) {
-        try {
-            URL imageUrl = new URL(image.getUrl());
+        // // Check for existance of same url
+        // this.imageService.getByUrl(image.getUrl());
 
-            java.awt.Image image2 = new ImageIcon(imageUrl).getImage();
-
-            image.setWidth(image2.getWidth(null));
-            image.setHeight(image2.getHeight(null));
-        } catch (MalformedURLException e1) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        Image imageFromDatabase;
+        // Image imageFromDatabase;
 
         if (skipCache) {
             // TODO: query new tags from external API
+        }
+
+        image.setAddedOn(LocalDateTime.now());
+
+        try {
+            URL imageUrl = new URL(image.getUrl());
+
+            java.awt.Image awtImage = new ImageIcon(imageUrl).getImage();
+
+            image.setWidth(awtImage.getWidth(null));
+            image.setHeight(awtImage.getHeight(null));
+        } catch (MalformedURLException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<TagCouple> tagCouples;
@@ -136,20 +136,25 @@ public class Controller {
         // NOTE: Automatically attaches a valid ID to image
         this.imageService.create(image);
 
-        image.setAddedOn(LocalDateTime.now());
+        Set<ImageTag> imageTags = new HashSet<>();
 
         tagCouples.stream()
+                .sequential()
                 .forEach((TagCouple tagCouple) -> {
                     Tag tag = this.tagService.createIfMissing(
                             tagCouple.getTag().getEn());
-                    this.imageTagService.create(
-                            new ImageTag(
+                    ImageTag imageTag = new ImageTag(
                                     image.getId(), tag.getId(),
                                     image, tag,
-                                    tagCouple.getConfidence()));
+                                    tagCouple.getConfidence());
+                    this.imageTagService.create(imageTag);
+                    imageTags.add(imageTag);
                 });
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        // Manually set imageTags before the DB transaction is made
+        image.setImageTags(imageTags);
+
+        return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
     private List<TagCouple> queryTagCouples(String imageUrl) throws MalformedURLException, IOException {
@@ -163,6 +168,8 @@ public class Controller {
         BufferedReader connectionInput = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
         String jsonResponse = connectionInput.readLine();
+
+        connectionInput.close();
 
         return GSON.fromJson(jsonResponse, Root.class).getResult().getTags();
     }

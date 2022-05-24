@@ -36,8 +36,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public Image getByUrl(String url) throws EntityNotFoundException {
+        Optional<Image> image = this.repository.getImageByUrl(url);
+
+        return image.orElseThrow(() -> {
+            return new EntityNotFoundException("Image not found");
+        });
+    }
+
+    @Override
     public Image create(Image image) {
-        return repository.saveAndFlush(image);
+        return image = repository.saveAndFlush(image);
     }
 
     @Override
@@ -71,6 +80,11 @@ public class ImageServiceImpl implements ImageService {
                             .containsAll(tags);
                 })
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public void flush() {
+        repository.flush();
     }
 
     @Override
